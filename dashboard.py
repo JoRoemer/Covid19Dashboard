@@ -273,6 +273,14 @@ app.layout = html.Div(
 
 
 @app.callback(
+    Output('shift-deaths-sep-switch', 'disabled'),
+    [Input('shift-switch', 'on')]
+)
+def update_separate_deaths_button(input_switch):
+    return not input_switch
+
+
+@app.callback(
     Output('world-map', 'figure'),
     [Input('date-selection', 'date'), Input('scale-switch', 'value')]
 )
