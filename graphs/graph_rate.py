@@ -76,8 +76,6 @@ class GraphRate(object):
         for i, country in enumerate(self.countries):
             graph = go.Scatter(
                 x=self.rate_data.columns,
-                #x=self.rate_data.columns[1:],
-                #y=self.rate_data.loc[self.rate_data['Country/Region'] == country].values[0][1:],
                 y=self.rate_data.loc[country],
                 name=country,
                 mode='lines+markers',

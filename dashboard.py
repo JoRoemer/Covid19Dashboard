@@ -8,6 +8,7 @@ import dash_daq as daq
 from graphs.map import WorldMap
 from graphs.graph_cases import GraphCases
 from graphs.graph_rate import GraphRate
+from graphs.graph_change_abs import GraphChangeAbs
 from tools.data import DataContainer
 
 data = DataContainer('data/time_series_covid19_confirmed_global.csv',
@@ -18,9 +19,9 @@ data = DataContainer('data/time_series_covid19_confirmed_global.csv',
 world_map = WorldMap(data, 'data/world.geo.json')
 graph_cases = GraphCases(data)
 graph_rate = GraphRate(data)
+graph_change = GraphChangeAbs(data)
 
-#external_stylesheets = ['styles.css']
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = []
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
@@ -40,17 +41,17 @@ app.layout = html.Div(
                         html.Div(
                             [html.H6(str(data.total_cases)), html.P('No. of Cases')],
                             id='total-cases',
-                            className='mini_container four columns',
+                            className='pretty_container four columns',
                             ),
                         html.Div(
                             [html.H6(str(data.total_deaths)), html.P('No. of Deaths')],
                             id='total-deaths',
-                            className='mini_container four columns',
+                            className='pretty_container four columns',
                             ),
                         html.Div(
                             [html.H6(str(data.total_recovered)), html.P('No. of Recoveries')],
                             id='total-recovered',
-                            className='mini_container four columns',
+                            className='pretty_container four columns',
                             ),
                     ],
                 className='eight columns',
@@ -248,28 +249,42 @@ app.layout = html.Div(
             ],
             className='row',
         ),
-    html.Div(
-        [
-            html.Div(
-                [
-                    dcc.Graph(
-                        id='cases-per-country',
-                    )
-                ],
-                className = 'pretty_container six columns',
-            ),
-            html.Div(
-                [
-                    dcc.Graph(
-                        id='rate-per-country',
-                    ),
-                ],
-                className = 'pretty_container six columns',
-            )
-        ],
-        className = 'row',
-    ),
-])
+        html.Div(
+            [
+                html.Div(
+                    [
+                        dcc.Graph(
+                            id='cases-per-country',
+                        )
+                    ],
+                    className = 'pretty_container six columns',
+                ),
+                html.Div(
+                    [
+                        dcc.Graph(
+                            id='rate-per-country',
+                        ),
+                    ],
+                    className = 'pretty_container six columns',
+                )
+            ],
+            className = 'row',
+        ),
+        html.Div(
+            [
+                html.Div(
+                    [
+                        dcc.Graph(
+                            id='change-per-country',
+                        ),
+                    ],
+                    className = 'pretty_container twelve columns',
+                ),
+            ],
+            className = 'row',
+        ),
+    ]
+)
 
 
 @app.callback(
@@ -329,12 +344,24 @@ def update_graph_cases(selected_data,
     Output('rate-per-country', 'figure'),
     [Input('world-map', 'selectedData'), Input('step-selection', 'value')]
 )
-def display_selected_data(selected_data, step):
+def update_graph_rate(selected_data, step):
     countries = [country['location'] for country in selected_data['points']] if selected_data is not None else []
     graph_rate.countries = countries
     graph_rate.step = step
 
     return graph_rate.figure
+
+
+@app.callback(
+    Output('change-per-country', 'figure'),
+    [Input('world-map', 'selectedData'), Input('step-selection', 'value')]
+)
+def update_graph_rate(selected_data, step):
+    countries = [country['location'] for country in selected_data['points']] if selected_data is not None else []
+    graph_change.countries = countries
+    graph_change.step = step
+
+    return graph_change.figure
 
 
 if __name__ == '__main__':

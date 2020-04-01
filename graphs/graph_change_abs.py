@@ -7,14 +7,17 @@ import tools.util
 import tools.data
 
 
-class GraphRate(object):
+class GraphChangeAbs(object):
     def __init__(self, data):
         self.data = data
 
 
-    @tools.util.cached_property
+    @property
     def data_per_day(self):
         data = tools.util.DataTuple(
+            cases=tools.util.get_diff_table(tools.util.rebin_table(self.data.cases, self.step)),
+            deaths=tools.util.get_diff_table(tools.util.rebin_table(self.data.deaths, self.step)),
+            recovered=tools.util.get_diff_table(tools.util.rebin_table(self.data.recovered, self.step)),
         )
         return data
 
@@ -32,30 +35,38 @@ class GraphRate(object):
 
 
     @property
+    def step(self):
+        if not hasattr(self, '_step'):
+            self._step = 1
+        return self._step
+
+
+    @step.setter
+    def step(self, val):
+        self._step = val
+
+
+    @property
     def figure(self):
         fig = go.Figure()
         for i, country in enumerate(self.countries):
-            graph = go.Scatter(
-                x=self.rate_data.columns,
-                #x=self.rate_data.columns[1:],
-                #y=self.rate_data.loc[self.rate_data['Country/Region'] == country].values[0][1:],
-                y=self.rate_data.loc[country],
+            graph = go.Bar(
+                x=self.data_per_day.cases.columns,
+                y=self.data_per_day.cases.loc[country],
                 name=country,
-                mode='lines+markers',
-                line_color=DEFAULT_PLOTLY_COLORS[i % 10],
-                legendgroup=country,
-                hovertext='rate (average over ' + str(self.step) + ' days)',
+                marker_color=DEFAULT_PLOTLY_COLORS[i % 10],
             )
             fig.add_trace(graph)
         fig.update_layout(
             margin=dict(t=10),
             xaxis_title='Date',
-            yaxis_title='Relative Change / %',
+            yaxis_title='Absolute Change',
             height=400,
             font=dict(
                 size=18,
                 color="#7f7f7f",
             ),
             paper_bgcolor='rgba(0,0,0,0)',
+            barmode='group',
         )
         return fig
