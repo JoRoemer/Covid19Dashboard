@@ -3,6 +3,7 @@
 ## Prerequisits
 
 - dash
+- dash\_daq
 - plotly
 - pandas
 - numpy
@@ -10,7 +11,7 @@
 ## Run the Dashboard
 
 ```
-python3 dashboard.py
+python(3) dashboard.py
 ```
 
 ## Data Source
