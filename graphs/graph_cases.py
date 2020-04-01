@@ -263,6 +263,7 @@ class GraphCases(object):
                 color="#7f7f7f",
             ),
             paper_bgcolor='rgba(0,0,0,0)',
+            showlegend=True,
         )
         if self.norm_to_population:
             fig.update_layout(yaxis_title='Number per 100k')

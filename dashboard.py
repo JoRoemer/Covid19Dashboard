@@ -41,18 +41,36 @@ app.layout = html.Div(
                         html.Div(
                             [html.H6(str(data.total_cases)), html.P('No. of Cases')],
                             id='total-cases',
-                            className='pretty_container four columns',
+                            className='pretty_container three columns',
                             ),
                         html.Div(
                             [html.H6(str(data.total_deaths)), html.P('No. of Deaths')],
                             id='total-deaths',
-                            className='pretty_container four columns',
+                            className='pretty_container three columns',
                             ),
                         html.Div(
                             [html.H6(str(data.total_recovered)), html.P('No. of Recoveries')],
                             id='total-recovered',
-                            className='pretty_container four columns',
+                            className='pretty_container three columns',
                             ),
+                        html.Div(
+                            [
+                                html.Small(
+                                    [
+                                        'Data provided by ',
+                                        html.A('Johns Hopkins University', href='https://github.com/CSSEGISandData/COVID-19'),
+                                    ],
+                                ),
+                                html.Br(),
+                                html.Small(
+                                    [
+                                        'Analysis code can be found on ',
+                                        html.A('github', href='https://github.com/JoRoemer/Covid19Dashboard'),
+                                    ],
+                                ),
+                            ],
+                            className='mini_container three columns',
+                        ),
                     ],
                 className='eight columns',
                 ),
@@ -238,11 +256,11 @@ app.layout = html.Div(
                 ),
                 html.Div(
                     [
-                        dcc.Loading([
+                        #dcc.Loading([
                             dcc.Graph(
                                 id='world-map',
                             ),
-                        ]),
+                        #]),
                     ],
                     className='pretty_container eight columns'
                 ),

@@ -80,7 +80,6 @@ class GraphRate(object):
                 name=country,
                 mode='lines+markers',
                 line_color=DEFAULT_PLOTLY_COLORS[i % 10],
-                legendgroup=country,
                 hovertext='rate (average over ' + str(self.step) + ' days)',
             )
             fig.add_trace(graph)
@@ -94,5 +93,6 @@ class GraphRate(object):
                 color="#7f7f7f",
             ),
             paper_bgcolor='rgba(0,0,0,0)',
+            showlegend=True,
         )
         return fig

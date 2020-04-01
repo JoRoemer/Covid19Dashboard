@@ -68,5 +68,6 @@ class GraphChangeAbs(object):
             ),
             paper_bgcolor='rgba(0,0,0,0)',
             barmode='group',
+            showlegend=True,
         )
         return fig

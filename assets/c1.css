@@ -120,7 +120,9 @@ body {
   font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: rgb(50, 50, 50);
   background-color: #f9f9f9;
-  margin: 5%;
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: 1%;
 }
 
 
@@ -413,6 +415,13 @@ there.
   padding: 1%;
   position: relative;
   box-shadow: 1px 1px 1px slategrey;
+}
+
+.mini_container{
+  margin-top: 2%;
+  margin-left: 1%;
+  margin-right: 0%;
+  position: relative;
 }
 
 .container_title {
