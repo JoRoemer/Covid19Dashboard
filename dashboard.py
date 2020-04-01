@@ -5,9 +5,9 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import dash_daq as daq
 
-from tools.map import WorldMap
-from tools.graph_cases import GraphCases
-from tools.graph_rate import GraphRate
+from graphs.map import WorldMap
+from graphs.graph_cases import GraphCases
+from graphs.graph_rate import GraphRate
 from tools.data import DataContainer
 
 data = DataContainer('data/time_series_covid19_confirmed_global.csv',

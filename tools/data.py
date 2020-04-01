@@ -77,7 +77,7 @@ class DataContainer(object):
 
     @tools.util.cached_property
     def dates(self):
-        return self.cases.columns[1:]
+        return self.cases.columns
 
 
     @tools.util.cached_property

@@ -145,46 +145,51 @@ class GraphCases(object):
 
     @tools.util.cached_property
     def data_per_population(self):
-        data = namedtuple('Data', ['cases', 'deaths', 'recovered'])
-        data.cases = self.norm_to_pupulation(self.data.cases)
-        data.deaths = self.norm_to_pupulation(self.data.deaths)
-        data.recovered = self.norm_to_pupulation(self.data.recovered)
+        data = tools.util.DataTuple(
+            cases=self.norm_to_pupulation(self.data.cases),
+            deaths=self.norm_to_pupulation(self.data.deaths),
+            recovered=self.norm_to_pupulation(self.data.recovered)
+        )
         return data
 
 
     @tools.util.cached_property
     def data_shifted_deaths_sep(self):
-        data = namedtuple('Data', ['cases', 'deaths', 'recovered'])
-        data.cases =  self.shift_x(self.data.cases)
-        data.deaths = self.shift_x(self.data.deaths, deaths=True)
-        data.recovered = self.shift_x(self.data.recovered)
+        data = tools.util.DataTuple(
+            cases=self.shift_x(self.data.cases),
+            deaths=self.shift_x(self.data.deaths, deaths=True),
+            recovered=self.shift_x(self.data.recovered)
+        )
         return data
 
 
     @tools.util.cached_property
     def data_shifted(self):
-        data = namedtuple('Data', ['cases', 'deaths', 'recovered'])
-        data.cases = self.shift_x(self.data.cases)
-        data.deaths = self.shift_x(self.data.deaths)
-        data.recovered = self.shift_x(self.data.recovered)
+        data = tools.util.DataTuple(
+            cases=self.shift_x(self.data.cases),
+            deaths=self.shift_x(self.data.deaths),
+            recovered=self.shift_x(self.data.recovered)
+        )
         return data
 
 
     @tools.util.cached_property
     def data_shifted_per_population_deaths_sep(self):
-        data = namedtuple('Data', ['cases', 'deaths', 'recovered'])
-        data.cases = self.norm_to_pupulation(self.data_shifted.cases)
-        data.deaths = self.norm_to_pupulation(self.data_shifted_deaths_sep.deaths)
-        data.recovered = self.norm_to_pupulation(self.data_shifted.recovered)
+        data = tools.util.DataTuple(
+            cases=self.norm_to_pupulation(self.data_shifted.cases),
+            deaths=self.norm_to_pupulation(self.data_shifted_deaths_sep.deaths),
+            recovered=self.norm_to_pupulation(self.data_shifted.recovered)
+        )
         return data
 
 
     @tools.util.cached_property
     def data_shifted_per_population(self):
-        data = namedtuple('Data', ['cases', 'deaths', 'recovered'])
-        data.cases = self.norm_to_pupulation(self.data_shifted.cases)
-        data.deaths = self.norm_to_pupulation(self.data_shifted.deaths)
-        data.recovered = self.norm_to_pupulation(self.data_shifted.recovered)
+        data = tools.util.DataTuple(
+            cases=self.norm_to_pupulation(self.data_shifted.cases),
+            deaths=self.norm_to_pupulation(self.data_shifted.deaths),
+            recovered=self.norm_to_pupulation(self.data_shifted.recovered)
+        )
         return data
 
 

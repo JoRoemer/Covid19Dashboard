@@ -14,51 +14,14 @@ class GraphRate(object):
 
     @property
     def rate_data(self):
-        length = len(self.data.dates)
+        # Rebin
+        df = tools.util.rebin_table(self.data.cases, self.step)
 
-        # First: Make a copy. Do not change actual data
-        df = self.data.cases.copy(deep=True)
-
-        # Transform column names to strins
-        #df = df.rename({column : tools.util.date_to_string(column) for column in df.columns[1:]}, axis=1)
-        df = df.rename({column : tools.util.date_to_string(column) for column in df.columns}, axis=1)
-
-        # Delete all columns which should be aggregated (result is already agregated, not delta per day
-        # so just delete all columns in betwee). 
-        # First create a list which columns should be kept, i.e., the ones every X days
-        keep_array = np.arange(length - self.step, 0, -self.step)
-        keep_array = list(reversed(keep_array))
-        #keep_array = [0] + [val for val in keep_array] + [length] # Region/Country
-        keep_array = [val for val in keep_array] + [length] # Region/Country
-
-        # Get a list of all days shifted 1 up (start of interval for next bin)
-        #start_dates = df.columns[[val + 1 for val in keep_array[1:-1]]]
-        start_dates = df.columns[[val + 1 for val in keep_array[:-1]]]
-        # First date must be saved seperately
-        first_date = df.columns[1]
-
-        # Delete columns not to be kept
-        for i, name in enumerate(df.columns):
-            if i not in keep_array:
-                del df[name]
-
-        # Create a list of the new names start-finish of period
-        #names = [first_date + '-' + df.columns[1]] + [start_dates[i-1] + '-' + df.columns[i+1] for i in range(1, len(df.columns) - 1)]
-        names = [first_date + '-' + df.columns[1]] + [start_dates[i-1] + '-' + df.columns[i+1] for i in range(0, len(df.columns) - 1)]
-
-        # Rename df
-        #df = df.rename({old_name : name for old_name, name in zip(df.columns[1:], names)}, axis=1)
-        df = df.rename({old_name : name for old_name, name in zip(df.columns, names)}, axis=1)
-
-        # Clone df. This one will contain the differences between the different days saved in df
-        df_diff = df.copy(deep=True)
-
-        # Calc differences
-        for i in reversed(range(1, len(names))):
-            df_diff[names[i]] = df_diff[names[i]].sub(df_diff[names[i-1]])
+        # Get diff
+        df_diff = tools.util.get_diff_table(df)
+        names = df_diff.columns
 
         # Add a dummy column at the start of the df. Rates are relative to start date, not end date
-        #df.insert(1, 'dummy', 0)
         df.insert(0, 'dummy', 0)
 
         # Common names for dividing
@@ -70,9 +33,6 @@ class GraphRate(object):
         # Divide both df's, scale with number of days and to percent
         #df_div = df_diff.iloc[:,1:].div(df.iloc[:,1:]) / self.step * 100
         df_div = df_diff.iloc[:,:].div(df.iloc[:,:]) / self.step * 100
-
-        # Add region back
-        #df_div.insert(0, 'Country/Region', df['Country/Region'])
 
         # Delete dummy column
         del df_div[df_div.columns[-1]]
