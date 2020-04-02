@@ -275,7 +275,7 @@ app.layout = html.Div(
                             id='cases-per-country',
                         )
                     ],
-                    className = 'pretty_container six columns',
+                    className='pretty_container six columns',
                 ),
                 html.Div(
                     [
@@ -283,24 +283,26 @@ app.layout = html.Div(
                             id='rate-per-country',
                         ),
                     ],
-                    className = 'pretty_container six columns',
+                    className='pretty_container six columns',
                 )
             ],
-            className = 'row',
+            className='row',
         ),
         html.Div(
             [
-                html.Div(
+                dcc.Tabs(
                     [
-                        dcc.Graph(
-                            id='change-per-country',
-                        ),
+                        dcc.Tab(label='Cases', value='tab-cases'),
+                        dcc.Tab(label='Deaths', value='tab-deaths'),
+                        dcc.Tab(label='Recovered', value='tab-recovered'),
                     ],
-                    className = 'pretty_container twelve columns',
+                    id='change-tabs',
+                    value='tab-cases',
                 ),
             ],
-            className = 'row',
+            className='twelve columns',
         ),
+        html.Div(id='change-tabs-content', className='pretty_container twelve columns'),
     ]
 )
 
@@ -371,15 +373,16 @@ def update_graph_rate(selected_data, step):
 
 
 @app.callback(
-    Output('change-per-country', 'figure'),
-    [Input('world-map', 'selectedData'), Input('step-selection', 'value')]
+    Output('change-tabs-content', 'children'),
+    [Input('world-map', 'selectedData'), Input('step-selection', 'value'), Input('change-tabs', 'value')]
 )
-def update_graph_rate(selected_data, step):
+def update_graph_change(selected_data, step, tab):
     countries = [country['location'] for country in selected_data['points']] if selected_data is not None else []
     graph_change.countries = countries
     graph_change.step = step
+    graph_change.selected_table = tab
 
-    return graph_change.figure
+    return dcc.Graph(figure=graph_change.figure)
 
 
 if __name__ == '__main__':

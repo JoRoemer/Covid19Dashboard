@@ -47,12 +47,31 @@ class GraphChangeAbs(object):
 
 
     @property
+    def selected_table(self):
+        if not hasattr(self, '_selected_table'):
+            self._selected_table = self.data_per_day.cases
+        return self._selected_table
+
+
+    @selected_table.setter
+    def selected_table(self, val):
+        if val == 'tab-cases':
+            self._selected_table = self.data_per_day.cases
+        elif val == 'tab-deaths':
+            self._selected_table = self.data_per_day.deaths
+        elif val == 'tab-recovered':
+            self._selected_table = self.data_per_day.recovered
+        else:
+            raise ValueError('Invalid tab selection ' % val)
+
+
+    @property
     def figure(self):
         fig = go.Figure()
         for i, country in enumerate(self.countries):
             graph = go.Bar(
-                x=self.data_per_day.cases.columns,
-                y=self.data_per_day.cases.loc[country],
+                x=self.selected_table.columns,
+                y=self.selected_table.loc[country],
                 name=country,
                 marker_color=DEFAULT_PLOTLY_COLORS[i % 10],
             )
