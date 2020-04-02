@@ -130,6 +130,7 @@ class GraphChangeAbs(object):
             fig.update_yaxes(
                 showgrid=False,
                 title='Rate / %',
-                secondary_y=True
+                secondary_y=True,
+                rangemode='nonnegative',
             )
         return fig

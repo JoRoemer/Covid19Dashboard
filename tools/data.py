@@ -21,6 +21,7 @@ class DataContainer(object):
         del df['Long']
         df = df.groupby('Country/Region', as_index=False).sum()
         df = df.replace('US', 'United States')
+        df = df.replace('Korea, South', 'Korea')
         df = df.rename({column : tools.util.string_to_date(column) for column in df.columns[1:]}, axis=1)
         df = df.set_index('Country/Region')
         return df
